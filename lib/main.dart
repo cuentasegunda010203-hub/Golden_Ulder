@@ -7,5 +7,16 @@ import 'package:artplay_launcher/app.dart';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() async => runApp(await initializeApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Forzar la orientación horizontal en la aplicación
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
+
+  runApp(await initializeApp());
+}
