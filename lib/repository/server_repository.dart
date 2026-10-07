@@ -14,10 +14,10 @@ class ServerRepository {
   /// TODO: Implement functionality to load servers from a remote source.
   List<Server> fetchServers() {
     final servers = [
-      Server('ip.artplaysamp.com', 7777),
-      Server('ip.artplaysamp.com', 7778),
-      Server('ip.artplaysamp.com', 7788),
-      Server('ip.artplaysamp.com', 7789),
+      Server('217.77.9.210', 7009),
+      Server('217.77.9.210', 7009),
+      Server('217.77.9.210', 7009),
+      Server('217.77.9.210', 7009),
     ];
 
     return servers;
