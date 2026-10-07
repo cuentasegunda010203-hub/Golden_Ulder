@@ -1,123 +1,182 @@
-// Copyright 2022-2023 Marlon "Eiss" Lorram. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// Flutter
 import 'package:flutter/material.dart';
+import 'package:artplay_launcher/entities/server.dart';
+import 'package:artplay_launcher/repository/server_repository.dart';
 
-// Internal
-import 'package:artplay_launcher/bloc/server/server_bloc.dart';
-import 'package:artplay_launcher/state/server_state_event.dart';
-import 'package:artplay_launcher/ui/colors.dart';
-import 'package:artplay_launcher/ui/widgets/server_tile.dart';
-
-// Packages
-import 'package:logging/logging.dart';
-import 'package:provider/provider.dart';
-
-class Servers extends StatefulWidget {
-  const Servers({super.key});
+class ServersScreen extends StatefulWidget {
+  const ServersScreen({super.key});
 
   @override
-  State<Servers> createState() => _ServersState();
+  State<ServersScreen> createState() => _ServersScreenState();
 }
 
-class _ServersState extends State<Servers> {
-  final log = Logger('Servers');
-  late ServerBloc _serverBloc;
+class _ServersScreenState extends State<ServersScreen> {
+  final ServerRepository _repository = ServerRepository();
+  List<Server> _servers = [];
 
   @override
   void initState() {
     super.initState();
-
-    log.fine('initState() - fetch servers');
-
-    _serverBloc = Provider.of<ServerBloc>(context, listen: false);
-    _serverBloc.loadServers(LoadServersEvent());
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  void _handleRefresh() {
-    log.fine('_handleRefresh');
-
-    _serverBloc.loadServers(RefreshServersEvent());
+    _servers = _repository.fetchServers();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: RefreshIndicator(
-                color: AppColors.primary,
-                backgroundColor: AppColors.background,
-                onRefresh: () async {
-                  /// Trigger the refresh action (e.g, fetch server info again)
-                  _handleRefresh();
-                },
-                child: StreamBuilder<ServerState>(
-                  initialData: ServerInitial(),
-                  stream: _serverBloc.stateStream,
-                  builder: (context, snapshot) {
-                    final state = snapshot.data;
-
-                    if (state is ServerInitial) {
-                      /// TODO:
-                    } else if (state is ServerLoadInProgress) {
-                      return const Center(
-                        child:
-                            CircularProgressIndicator(color: AppColors.primary),
-                      );
-                    } else if (state is ServerLoadFailure) {
-                      return Center(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/ic_launcher_background.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+            child: Column(
+              children: [
+                // Encabezado con Logo / Título del Servidor
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/ic_icon.png',
+                          height: 40,
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          'GOLDEN UNDERWORLD RP',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Indicador de Estado
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.green.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.green),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.circle, color: Colors.green, size: 10),
+                          SizedBox(width: 6),
+                          Text(
+                            'ONLINE',
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                // Panel Principal Horizontal (Información + Botón de Jugar)
+                Row(
+                  children: [
+                    // Tarjeta de Información del Servidor (Izquierda)
+                    Expanded(
+                      flex: 6,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.75),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.amber.withOpacity(0.5)),
+                        ),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            TextButton(
-                              onPressed: () {
-                                /// Retry fetching server info
-                                _handleRefresh();
-                              },
-                              child: const Text('Tentar novamente'),
+                            Text(
+                              _servers.isNotEmpty ? 'Servidor Oficial #1' : 'Cargando...',
+                              style: const TextStyle(
+                                color: Colors.amber,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Icon(Icons.dns, color: Colors.grey, size: 16),
+                                const SizedBox(width: 6),
+                                Text(
+                                  _servers.isNotEmpty
+                                      ? '${_servers[0].address}:${_servers[0].port}'
+                                      : 'ip.tuservidor.com:7777',
+                                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            const Row(
+                              children: [
+                                Icon(Icons.people, color: Colors.grey, size: 16),
+                                SizedBox(width: 6),
+                                Text(
+                                  'Jugadores: 0 / 100',
+                                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      );
-                    } else if (state is ServerLoadSuccess) {
-                      final data = state;
-
-                      return ListView.builder(
-                        itemCount: data.serverInfos!.length,
-                        itemBuilder: (context, index) {
-                          final server = data.serverInfos![index];
-
-                          return ServerTile(
-                            hostname: server.hostname,
-                            address: server.address,
-                            gamemode: server.gamemode,
-                            players: '${server.players}/${server.maxPlayers}',
-                            onTap: () {},
-                          );
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    // Botón Principal de Acción (Derecha)
+                    Expanded(
+                      flex: 4,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.amber,
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 8,
+                        ),
+                        onPressed: () {
+                          // Acción de Conectar o Descargar
                         },
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.play_arrow, size: 32),
+                            SizedBox(width: 8),
+                            Text(
+                              'CONECTAR',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            )
-          ],
+                const Spacer(),
+              ],
+            ),
+          ),
         ),
       ),
-      backgroundColor: Colors.transparent,
-      extendBody: true,
     );
   }
 }
