@@ -21,10 +21,19 @@ class ServerService {
   /// Fetches information for a specific server.
   /// Returns a `Future` that completes with a [ServerInfo] if the server information was fetched successfully.
   /// Returns `null` if there was an error fetching the server information.
+  ///
+  /// The ping is the time the query took (approximate: it includes opening the
+  /// UDP socket and any retries done by `samp_query`).
   Future<ServerInfo?> _fetchServerInfo(Server server) async {
+    final stopwatch = Stopwatch()..start();
+
     try {
       final info = await _sampQuery.send(server);
-      return ServerInfo.fromInfo(info!);
+      stopwatch.stop();
+
+      if (info == null) return null;
+
+      return ServerInfo.fromInfo(info, pingMs: stopwatch.elapsedMilliseconds);
     } catch (e) {
       log.severe('Failed to fetch server info', e);
       return null;

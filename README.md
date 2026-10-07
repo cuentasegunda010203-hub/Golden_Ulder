@@ -1,81 +1,49 @@
-# Artplay: launcher
+# Golden Underworld RP · Launcher
 
-This is the official repository for the Artplay: launcher - the simple way to launcher our mobile version of SA-MP, built with Dart & Flutter.
-***
+Launcher móvil (Android) para el servidor de rol **Golden Underworld RP** de SA-MP, hecho con Dart y Flutter.
 
-Latest build status
+![Maqueta del diseño](docs/design/mockup.png)
 
-[![Codemagic build status](https://api.codemagic.io/apps/67ae242b16ac4c6e7268ba9d/67ae242b16ac4c6e7268ba9c/status_badge.svg)](https://codemagic.io/apps/67ae242b16ac4c6e7268ba9d/67ae242b16ac4c6e7268ba9c/latest_build)
-***
+> La imagen es una maqueta de referencia del diseño (negro · dorado · crema), no una captura de pantalla.
 
-![servers.png](docs/servers.jpg)&nbsp;
+## Compilar
 
-## Getting Started
-
-Artplay: launcher is currently at v1.0.x and is built against Flutter 3.16.5+.
-
-#### Building from source
-
-If you do not already have the Flutter SDK installed, follow the instructions from the
-Flutter site [here](https://flutter.dev/docs/get-started/install).
-
-Fetch the latest from main:
+Requiere Flutter 3.27.0 (el mismo que usa el workflow de GitHub Actions).
 
 ```
-git clone https://github.com/artplaygamesofc/artplay_launcher.git
-```
-
-From the artplay_launcher directory fetch the dependencies:
-
-```
-flutter packages get
-```
-
-Then either run:
-
-```
-flutter run
-```
-
-Or build:
-
-```
+flutter pub get
+flutter run          # en un dispositivo/emulador en horizontal
 flutter build apk
 ```
 
-## Built With
+También puedes generar el APK de depuración desde **Actions → Build APK → Run workflow**.
 
-Artplay: launcher makes use of several amazing packages available on [pub.dev](https://pub.dev). Below is a
-list of the packages that
-are heavily used within the application.
+## Configuración rápida
 
-* [Flutter](https://flutter.dev/) - SDK.
-* [RxDart](https://pub.dev/packages/rxdart) - adds additional capabilities to Dart Streams and
-  StreamControllers.
+Todo lo editable (nombre, IP, puerto, enlaces de Discord y web) está en
+[`lib/config/app_config.dart`](lib/config/app_config.dart).
 
-## Architecture
+## Estructura
 
-![architecture.png](docs/architecture.png)
+```
+lib/
+├── config/        Datos de marca y del servidor
+├── bloc/          Estado (BLoC con RxDart): servidores y navegación
+├── state/         Eventos y estados de los BLoC
+├── entities/      Modelos
+├── repository/    Origen de los datos (lista de servidores)
+├── services/      Consulta UDP al servidor (samp_query)
+└── ui/
+    ├── theme/     Colores, tipografía y medidas (único lugar con valores de diseño)
+    ├── shell/     Barra lateral + página activa
+    ├── screens/   home · servers · settings
+    ├── widgets/   Componentes reutilizables (GeoTile, formas, chips…)
+    └── utils/     Acciones de UI (copiar, abrir enlaces, avisos)
+```
 
-Artplay: launcher takes a layered approach:
+Guía de diseño: [`docs/DESIGN.md`](docs/DESIGN.md).
 
-* UI - The UI presented to the users.
-* BLoC - Handles the state for the UI. Communication between the UI and BLoC is entirely via Sinks
-  and Streams.
-* Services - Interacts with the API and Repository to provide data handling routines to the BLoCs
-  and other services.
-* API - Interacts with the servers API.
-* Repository - Provides for data management.
+## Créditos y licencia
 
-## Contributing
-
-If you have an issue or discover a bug, please raise a GitHub issue. Pull requests are also welcome.
-
-## Have a question?
-
-If you wish to reach out to me directly you can find me
-at [marlonlorram94@gmail.com](mailto:marlonlorram94@gmail.com).
-
-## License
-
-Artplay: launcher is released under a BSD-Style License. See the LICENSE file for further details.
+Basado en *Artplay: launcher* de Marlon "Eiss" Lorram (licencia BSD). Se conservan
+el archivo [LICENSE](LICENSE) y los avisos de copyright de los archivos originales.

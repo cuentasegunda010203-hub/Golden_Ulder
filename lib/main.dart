@@ -4,18 +4,10 @@
 
 import 'package:artplay_launcher/app.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Forzar orientación horizontal y modo pantalla completa (Immersive)
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
-  
-  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-
+  // Orientación, modo inmersivo y logs se configuran en initializeApp().
   runApp(await initializeApp());
 }

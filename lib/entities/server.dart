@@ -25,21 +25,49 @@ class ServerInfo {
   /// Maximum amount of players that can join the server.
   final int maxPlayers;
 
+  /// Language reported by the server (may be empty).
+  final String language;
+
+  /// Whether the server is password protected.
+  final bool hasPassword;
+
+  /// Approximate round-trip time of the query in milliseconds.
+  final int? pingMs;
+
   ServerInfo(
     this.hostname,
     this.address,
     this.gamemode,
     this.players,
-    this.maxPlayers,
-  );
+    this.maxPlayers, {
+    this.language = '',
+    this.hasPassword = false,
+    this.pingMs,
+  });
 
-  factory ServerInfo.fromInfo(Info info) {
+  factory ServerInfo.fromInfo(Info info, {int? pingMs}) {
     return ServerInfo(
       info.hostname,
       info.address,
       info.gamemode,
       info.players,
       info.maxPlayers,
+      language: info.language,
+      hasPassword: info.password != 0,
+      pingMs: pingMs,
     );
+  }
+
+  /// Player occupancy from 0.0 to 1.0.
+  double get fill => maxPlayers <= 0 ? 0 : (players / maxPlayers).clamp(0.0, 1.0);
+
+  /// Connection quality from 0 (unknown) to 4 (excellent), for the signal bars.
+  int get signalLevel {
+    final p = pingMs;
+    if (p == null) return 0;
+    if (p < 60) return 4;
+    if (p < 110) return 3;
+    if (p < 180) return 2;
+    return 1;
   }
 }

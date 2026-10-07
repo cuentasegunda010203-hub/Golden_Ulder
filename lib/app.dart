@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 // Flutter
-import 'package:artplay_launcher/ui/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,9 +11,11 @@ import 'package:flutter/services.dart';
 import 'package:artplay_launcher/bloc/ui/pager_bloc.dart';
 import 'package:artplay_launcher/bloc/download/download_bloc.dart';
 import 'package:artplay_launcher/bloc/server/server_bloc.dart';
+import 'package:artplay_launcher/config/app_config.dart';
 import 'package:artplay_launcher/repository/server_repository.dart';
 import 'package:artplay_launcher/services/server_service.dart';
-import 'package:artplay_launcher/ui/root/root.dart';
+import 'package:artplay_launcher/ui/shell/app_shell.dart';
+import 'package:artplay_launcher/ui/theme/app_theme.dart';
 
 // Packages
 import 'package:logging/logging.dart';
@@ -24,39 +26,35 @@ import 'package:provider/provider.dart';
 Future<Widget> initializeApp() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // El launcher es horizontal (coincide con AndroidManifest: landscape).
+  // Antes main.dart y este archivo se contradecían (landscape vs portrait).
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+    const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+  );
 
-  Logger.root.level = Level.FINE;
-
+  Logger.root.level = kDebugMode ? Level.FINE : Level.WARNING;
   Logger.root.onRecord.listen((record) {
-    print(
-        '${record.level.name}: - ${record.time}: ${record.loggerName}: ${record.message}');
+    debugPrint(
+      '${record.level.name}: - ${record.time}: ${record.loggerName}: ${record.message}',
+    );
   });
 
-  return ArtplayLauncherApp();
+  final serverService = ServerService(ServerRepository());
+
+  return LauncherApp(serverService: serverService);
 }
 
-/// Artplay is a launcher for SA-MP.
-// ignore: must_be_immutable
-class ArtplayLauncherApp extends StatefulWidget {
-  late ServerRepository serverRepository;
-  late ServerService serverService;
+/// Root widget of the launcher.
+class LauncherApp extends StatelessWidget {
+  final ServerService serverService;
 
-  ArtplayLauncherApp({super.key}) {
-    serverRepository = ServerRepository();
+  const LauncherApp({super.key, required this.serverService});
 
-    serverService = ServerService(
-      serverRepository,
-    );
-  }
-
-  @override
-  ArtplayLauncherAppState createState() => ArtplayLauncherAppState();
-}
-
-class ArtplayLauncherAppState extends State<ArtplayLauncherApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -70,17 +68,15 @@ class ArtplayLauncherAppState extends State<ArtplayLauncherApp> {
           dispose: (_, value) => value.dispose(),
         ),
         Provider<ServerBloc>(
-          create: (_) => ServerBloc(
-            widget.serverService,
-          ),
+          create: (_) => ServerBloc(serverService),
           dispose: (_, value) => value.dispose(),
         ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Artplay: launcher',
-        home: const Root(title: 'Artplay: launcher'),
-        theme: CustomTheme.createTheme,
+        title: '${AppConfig.serverName} ${AppConfig.serverSuffix}',
+        theme: AppTheme.dark,
+        home: const AppShell(),
       ),
     );
   }

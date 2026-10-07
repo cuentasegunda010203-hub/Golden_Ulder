@@ -1,6 +1,9 @@
-// Copyright 2022-2023 Villa "Eiss" Lorram. All rights reserved.
+// Copyright 2022-2023 Marlon "Eiss" Lorram. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+
+// Internal
+import 'package:artplay_launcher/config/app_config.dart';
 
 // Packages
 import 'package:samp_query/samp_query.dart';
@@ -14,7 +17,7 @@ class ServerRepository {
   /// TODO: Implement functionality to load servers from a remote source.
   List<Server> fetchServers() {
     final servers = [
-      Server('217.77.9.210', 7009),
+      Server(AppConfig.serverHost, AppConfig.serverPort),
     ];
 
     return servers;
