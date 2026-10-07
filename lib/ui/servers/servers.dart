@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:artplay_launcher/entities/server.dart';
+import 'package:samp_query/samp_query.dart';
 import 'package:artplay_launcher/repository/server_repository.dart';
 
-class ServersScreen extends StatefulWidget {
-  const ServersScreen({super.key});
+class Servers extends StatefulWidget {
+  const Servers({super.key});
 
   @override
-  State<ServersScreen> createState() => _ServersScreenState();
+  State<Servers> createState() => _ServersState();
 }
 
-class _ServersScreenState extends State<ServersScreen> {
+class _ServersState extends State<Servers> {
   final ServerRepository _repository = ServerRepository();
   List<Server> _servers = [];
 
