@@ -59,7 +59,7 @@ class _ServersState extends State<Servers> {
                             style: TextStyle(
                               color: Color(0xFFFFD700),
                               fontSize: 18,
-                              fontWeight: FontWeight.black,
+                              fontWeight: FontWeight.w900,
                               letterSpacing: 1.5,
                               shadows: [
                                 Shadow(blurRadius: 8, color: Colors.black, offset: Offset(1, 1))
@@ -103,7 +103,7 @@ class _ServersState extends State<Servers> {
                     ],
                   ),
                   const Spacer(),
-                  // --- PANEL PRINCIPAL (IZQUIERDA: DATO / DERECHA: ACCIONES) ---
+                  // --- PANEL PRINCIPAL (IZQUIERDA: DATOS / DERECHA: ACCIONES) ---
                   Expanded(
                     flex: 8,
                     child: Row(
@@ -187,7 +187,7 @@ class _ServersState extends State<Servers> {
                                         'JUGAR',
                                         style: TextStyle(
                                           fontSize: 20,
-                                          fontWeight: FontWeight.black,
+                                          fontWeight: FontWeight.w900,
                                           letterSpacing: 1.2,
                                         ),
                                       ),
