@@ -6,8 +6,7 @@ import 'package:artplay_launcher/ui/theme/app_metrics.dart';
 import 'package:artplay_launcher/ui/theme/app_theme.dart';
 import 'package:artplay_launcher/ui/widgets/brand_mark.dart';
 
-/// Barra de navegación vertical (el launcher es horizontal, así se aprovecha
-/// el ancho y no se pierde altura como con una barra inferior).
+/// Navegación lateral conservando la identidad geométrica del launcher.
 class AppNavRail extends StatelessWidget {
   const AppNavRail({
     super.key,
@@ -21,6 +20,7 @@ class AppNavRail extends StatelessWidget {
   static const _items = <_RailItem>[
     _RailItem(AppPage.home, Icons.home_rounded, 'Inicio'),
     _RailItem(AppPage.servers, Icons.dns_rounded, 'Servidores'),
+    _RailItem(AppPage.downloads, Icons.download_rounded, 'Descargas'),
     _RailItem(AppPage.settings, Icons.tune_rounded, 'Ajustes'),
   ];
 
