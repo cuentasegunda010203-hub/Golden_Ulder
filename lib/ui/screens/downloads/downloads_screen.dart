@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:artplay_launcher/config/app_config.dart';
 import 'package:artplay_launcher/ui/theme/app_colors.dart';
@@ -8,54 +7,22 @@ import 'package:artplay_launcher/ui/theme/app_theme.dart';
 import 'package:artplay_launcher/ui/widgets/geo_tile.dart';
 import 'package:artplay_launcher/ui/widgets/screen_header.dart';
 
-/// Centro de descargas del cliente Android.
-///
-/// La descarga solo se habilita cuando AppConfig.clientApkUrl apunta a una
-/// distribución HTTPS conocida. No se inventa ni se descarga un APK de origen
-/// desconocido.
+/// Centro de recursos del servidor.
+/// El cliente SA-MP se configura por separado; aquí se publicarán recursos
+/// propios cuando exista un paquete real y compatible que distribuir.
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({super.key});
 
-  Future<void> _openClientDownload(BuildContext context) async {
-    final source = AppConfig.clientApkUrl;
-    if (source == null || source.isEmpty) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          const SnackBar(
-            content: Text('La fuente oficial del cliente todavía no está configurada.'),
-          ),
-        );
-      return;
-    }
-
-    final uri = Uri.tryParse(source);
-    if (uri == null || uri.scheme != 'https' || !await canLaunchUrl(uri)) {
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          const SnackBar(content: Text('No se pudo abrir la fuente de descarga.')),
-        );
-      return;
-    }
-
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final sourceConfigured = AppConfig.clientApkUrl != null &&
-        AppConfig.clientApkUrl!.isNotEmpty;
-
     return Padding(
       padding: const EdgeInsets.all(AppMetrics.page),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const ScreenHeader(
-            eyebrow: 'CLIENTE ANDROID',
-            title: 'Descargas',
+            eyebrow: 'GOLDEN UNDERWORLD RP',
+            title: 'Centro de recursos',
           ),
           const SizedBox(height: 14),
           Expanded(
@@ -70,68 +37,66 @@ class DownloadsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 48,
-                              height: 48,
-                              color: AppColors.gold,
-                              child: const Icon(
-                                Icons.android_rounded,
-                                color: AppColors.ink,
-                                size: 29,
-                              ),
-                            ),
-                            const SizedBox(width: 14),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'GOLDEN UNDERWORLD',
-                                    style: AppText.label.copyWith(color: AppColors.gold),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  const Text('Cliente SA-MP para Android', style: AppText.titleL),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        Container(height: 1, color: AppColors.inkLine),
-                        const SizedBox(height: 20),
-                        Text(
-                          sourceConfigured ? 'FUENTE DISPONIBLE' : 'DESCARGA EN PREPARACIÓN',
-                          style: AppText.label.copyWith(
-                            color: sourceConfigured ? AppColors.online : AppColors.gold,
+                        Container(
+                          width: 48,
+                          height: 48,
+                          color: AppColors.gold,
+                          child: const Icon(
+                            Icons.inventory_2_rounded,
+                            color: AppColors.ink,
+                            size: 28,
                           ),
+                        ),
+                        const SizedBox(height: 22),
+                        Text(
+                          'RECURSOS OFICIALES',
+                          style: AppText.label.copyWith(color: AppColors.gold),
                         ),
                         const SizedBox(height: 10),
-                        Text(
-                          sourceConfigured
-                              ? 'La fuente del cliente está configurada. Abre la descarga para continuar con el instalador de Android.'
-                              : 'Aquí estará el instalador del cliente necesario para entrar al servidor. Estamos preparando la fuente de distribución antes de habilitar la descarga.',
-                          style: AppText.body.copyWith(color: AppColors.creamDim, height: 1.6),
+                        const Text(
+                          'Un solo lugar para preparar la experiencia Golden Underworld.',
+                          style: AppText.titleL,
                         ),
-                        const Spacer(),
-                        SizedBox(
-                          width: double.infinity,
-                          child: FilledButton.icon(
-                            onPressed: () => _openClientDownload(context),
-                            icon: Icon(sourceConfigured
-                                ? Icons.download_rounded
-                                : Icons.hourglass_top_rounded),
-                            label: Text(sourceConfigured ? 'ABRIR DESCARGA' : 'DESCARGA NO DISPONIBLE'),
+                        const SizedBox(height: 12),
+                        Text(
+                          'La prioridad actual es conectar el launcher con tu servidor SA-MP ya existente. Este apartado quedará preparado para publicar recursos compatibles cuando empecemos con los vehículos y las texturas.',
+                          style: AppText.body.copyWith(
+                            color: AppColors.creamDim,
+                            height: 1.6,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          sourceConfigured
-                              ? 'La instalación final puede requerir autorización de Android.'
-                              : 'No se descargará ningún archivo hasta verificar el enlace del APK.',
-                          style: AppText.caption.copyWith(color: AppColors.creamDim),
-                          textAlign: TextAlign.center,
+                        const Spacer(),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColors.inkLine),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.dns_rounded,
+                                color: AppColors.gold,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('SERVIDOR CONFIGURADO', style: AppText.label),
+                                    const SizedBox(height: 4),
+                                    SelectableText(
+                                      AppConfig.address,
+                                      style: AppText.body.copyWith(
+                                        color: AppColors.cream,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -149,24 +114,24 @@ class DownloadsScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('INSTALACIÓN', style: AppText.label),
-                              const SizedBox(height: 14),
-                              const _StepLine(
-                                number: '01',
-                                title: 'Descargar',
-                                detail: 'Obtener el APK desde una fuente verificada.',
+                              Text('SIGUIENTES PAQUETES', style: AppText.label),
+                              const SizedBox(height: 16),
+                              const _ResourceLine(
+                                icon: Icons.directions_car_rounded,
+                                title: 'Vehículos',
+                                detail: 'Modelos y texturas compatibles.',
                               ),
                               const SizedBox(height: 16),
-                              const _StepLine(
-                                number: '02',
-                                title: 'Instalar',
-                                detail: 'Android solicitará autorización si es necesaria.',
+                              const _ResourceLine(
+                                icon: Icons.texture_rounded,
+                                title: 'Texturas y mapas',
+                                detail: 'Contenido visual versionado.',
                               ),
                               const SizedBox(height: 16),
-                              const _StepLine(
-                                number: '03',
-                                title: 'Conectar',
-                                detail: 'Volver al launcher para entrar al servidor.',
+                              const _ResourceLine(
+                                icon: Icons.verified_user_rounded,
+                                title: 'Integridad',
+                                detail: 'Versiones y hashes verificables.',
                               ),
                             ],
                           ),
@@ -181,28 +146,16 @@ class DownloadsScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'VERIFICACIÓN',
+                                'IMPORTANTE',
                                 style: AppText.label.copyWith(color: AppColors.gold),
                               ),
                               const SizedBox(height: 10),
-                              const _IntegrityRow(
-                                title: 'Origen del APK',
-                                value: sourceConfigured ? 'Configurado' : 'Pendiente',
-                              ),
-                              const SizedBox(height: 8),
-                              const _IntegrityRow(
-                                title: 'Hash SHA-256',
-                                value: 'Por configurar',
-                              ),
-                              const SizedBox(height: 8),
-                              const _IntegrityRow(
-                                title: 'Instalación silenciosa',
-                                value: 'No permitida',
-                              ),
-                              const Spacer(),
                               Text(
-                                'La verificación de integridad se incorporará antes de publicar el cliente.',
-                                style: AppText.caption.copyWith(color: AppColors.creamDim),
+                                'El launcher no incluye ni reemplaza el cliente SA-MP. Para jugar, necesitas tener un cliente compatible instalado; el botón JUGAR intentará abrirlo mediante un enlace de servidor.',
+                                style: AppText.body.copyWith(
+                                  color: AppColors.creamDim,
+                                  height: 1.5,
+                                ),
                               ),
                             ],
                           ),
@@ -220,14 +173,14 @@ class DownloadsScreen extends StatelessWidget {
   }
 }
 
-class _StepLine extends StatelessWidget {
-  const _StepLine({
-    required this.number,
+class _ResourceLine extends StatelessWidget {
+  const _ResourceLine({
+    required this.icon,
     required this.title,
     required this.detail,
   });
 
-  final String number;
+  final IconData icon;
   final String title;
   final String detail;
 
@@ -236,38 +189,21 @@ class _StepLine extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(number, style: AppText.titleM.copyWith(color: AppColors.inkMuted)),
-        const SizedBox(width: 12),
+        Icon(icon, size: 22, color: AppColors.ink),
+        const SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: AppText.titleM),
+              Text(title, style: AppText.body.copyWith(fontWeight: FontWeight.w700)),
               const SizedBox(height: 3),
-              Text(detail, style: AppText.body.copyWith(color: AppColors.inkMuted)),
+              Text(
+                detail,
+                style: AppText.caption.copyWith(color: AppColors.inkMuted),
+              ),
             ],
           ),
         ),
-      ],
-    );
-  }
-}
-
-class _IntegrityRow extends StatelessWidget {
-  const _IntegrityRow({required this.title, required this.value});
-
-  final String title;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(title, style: AppText.body.copyWith(color: AppColors.creamDim)),
-        ),
-        const SizedBox(width: 8),
-        Text(value, style: AppText.caption.copyWith(color: AppColors.cream)),
       ],
     );
   }
