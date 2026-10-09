@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:artplay_launcher/config/app_config.dart';
 import 'package:artplay_launcher/ui/theme/app_colors.dart';
 
 /// Prototipo visual del panel de gestión.
