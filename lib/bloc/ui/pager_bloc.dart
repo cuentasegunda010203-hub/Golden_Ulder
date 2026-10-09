@@ -6,7 +6,7 @@ import 'package:artplay_launcher/bloc/bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// Pages reachable from the side navigation.
-enum AppPage { home, servers, management, downloads, settings }
+enum AppPage { home, servers, downloads, settings }
 
 class PagerBloc extends Bloc {
   final BehaviorSubject<AppPage> _currentPage =
