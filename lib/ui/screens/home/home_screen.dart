@@ -238,7 +238,54 @@ class _PlayTile extends StatelessWidget {
       semanticLabel: 'Jugar',
       // TODO: aquí va la lógica real (verificar archivos del juego, descargar
       // si faltan y lanzar SA-MP con el nombre de jugador y el servidor).
-      onTap: () => showAppSnack(context, 'Lanzamiento del juego pendiente'),
+      onTap: () => showDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          backgroundColor: AppColors.ink,
+          title: const Text('PREPARANDO TU ENTRADA',
+              style: TextStyle(color: AppColors.cream, fontWeight: FontWeight.w800)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Golden Underworld RP está listo para configurarse. La conexión directa se activará cuando integremos el cliente SA-MP compatible.',
+                style: TextStyle(color: AppColors.creamDim, height: 1.45),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                color: AppColors.inkRaised,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('DIRECCIÓN DEL SERVIDOR',
+                        style: TextStyle(color: AppColors.gold, fontSize: 10, letterSpacing: 1.2)),
+                    const SizedBox(height: 5),
+                    SelectableText(AppConfig.address,
+                        style: const TextStyle(color: AppColors.cream, fontWeight: FontWeight.w700)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('CERRAR'),
+            ),
+            FilledButton.icon(
+              onPressed: () {
+                copyText(context, AppConfig.address, message: 'Dirección copiada');
+                Navigator.of(dialogContext).pop();
+              },
+              icon: const Icon(Icons.copy_rounded, size: 17),
+              label: const Text('COPIAR IP'),
+            ),
+          ],
+        ),
+      ),
       decorations: const [
         Positioned(
           top: -34,
