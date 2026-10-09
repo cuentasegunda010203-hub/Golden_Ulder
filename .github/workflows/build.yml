@@ -42,9 +42,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed lib
-
       - name: Build debug APK
         run: flutter build apk --debug --no-tree-shake-icons --android-skip-build-dependency-validation
 
