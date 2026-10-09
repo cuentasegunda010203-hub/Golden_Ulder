@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:artplay_launcher/bloc/ui/pager_bloc.dart';
 import 'package:artplay_launcher/ui/screens/downloads/downloads_screen.dart';
 import 'package:artplay_launcher/ui/screens/home/home_screen.dart';
+import 'package:artplay_launcher/ui/screens/management/management_screen.dart';
 import 'package:artplay_launcher/ui/screens/servers/servers_screen.dart';
 import 'package:artplay_launcher/ui/screens/settings/settings_screen.dart';
 import 'package:artplay_launcher/ui/shell/nav_rail.dart';
@@ -15,6 +16,7 @@ class AppShell extends StatelessWidget {
   static const Map<AppPage, Widget> _pages = {
     AppPage.home: HomeScreen(),
     AppPage.servers: ServersScreen(),
+    AppPage.management: ManagementScreen(),
     AppPage.downloads: DownloadsScreen(),
     AppPage.settings: SettingsScreen(),
   };
