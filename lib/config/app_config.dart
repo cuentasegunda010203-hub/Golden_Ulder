@@ -16,9 +16,4 @@ abstract class AppConfig {
   static const String? discordUrl = null;
   static const String? websiteUrl = null;
 
-  /// URL HTTPS del APK del cliente SA-MP Android.
-  ///
-  /// Debe apuntar a una publicación de confianza. Se deja null hasta que se
-  /// confirme la distribución oficial; así no se ofrece un APK desconocido.
-  static const String? clientApkUrl = null;
 }
