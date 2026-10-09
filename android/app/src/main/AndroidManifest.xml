@@ -25,6 +25,11 @@
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="https" />
         </intent>
+        <!-- Permite consultar clientes que registran el enlace samp:// -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="samp" />
+        </intent>
     </queries>
 
     <!-- Package Management -->
