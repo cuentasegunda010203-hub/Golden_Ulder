@@ -6,7 +6,7 @@ import 'package:artplay_launcher/ui/theme/app_metrics.dart';
 import 'package:artplay_launcher/ui/theme/app_theme.dart';
 import 'package:artplay_launcher/ui/widgets/brand_mark.dart';
 
-/// Navegación lateral conservando la identidad geométrica del launcher.
+/// Navegación principal simplificada del launcher.
 class AppNavRail extends StatelessWidget {
   const AppNavRail({
     super.key,
@@ -20,8 +20,7 @@ class AppNavRail extends StatelessWidget {
   static const _items = <_RailItem>[
     _RailItem(AppPage.home, Icons.home_rounded, 'Inicio'),
     _RailItem(AppPage.servers, Icons.dns_rounded, 'Servidores'),
-    _RailItem(AppPage.management, Icons.dashboard_customize_rounded, 'Panel'),
-    _RailItem(AppPage.downloads, Icons.download_rounded, 'Descargas'),
+    _RailItem(AppPage.downloads, Icons.download_rounded, 'Recursos'),
     _RailItem(AppPage.settings, Icons.tune_rounded, 'Ajustes'),
   ];
 
