@@ -10,6 +10,7 @@ import 'package:artplay_launcher/ui/theme/app_colors.dart';
 import 'package:artplay_launcher/ui/theme/app_metrics.dart';
 import 'package:artplay_launcher/ui/theme/app_theme.dart';
 import 'package:artplay_launcher/ui/utils/actions.dart';
+import 'package:artplay_launcher/services/server_connection_service.dart';
 import 'package:artplay_launcher/ui/widgets/geo_shapes.dart';
 import 'package:artplay_launcher/ui/widgets/geo_tile.dart';
 import 'package:artplay_launcher/ui/widgets/status_chip.dart';
@@ -231,61 +232,70 @@ class _AddressChip extends StatelessWidget {
 class _PlayTile extends StatelessWidget {
   const _PlayTile();
 
+  Future<void> _connect(BuildContext context) async {
+    // Solicita al cliente SA-MP instalado que abra la dirección del servidor.
+    // El resultado indica si Android aceptó el enlace, no si ya conectó al juego.
+    final opened = await ServerConnectionService.openServer();
+    if (!context.mounted || opened) return;
+
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.ink,
+        title: const Text(
+          'NO SE ENCONTRÓ EL CLIENTE',
+          style: TextStyle(
+            color: AppColors.cream,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Para entrar directamente necesitas un cliente SA-MP Android compatible con enlaces samp://. No se detectó una aplicación que aceptara la solicitud. Instala o abre tu cliente y vuelve a intentarlo.',
+              style: TextStyle(color: AppColors.creamDim, height: 1.45),
+            ),
+            const SizedBox(height: 14),
+            SelectableText(
+              AppConfig.address,
+              style: const TextStyle(
+                color: AppColors.gold,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              copyText(context, AppConfig.address, message: 'Dirección copiada');
+              Navigator.of(dialogContext).pop();
+            },
+            icon: const Icon(Icons.copy_rounded, size: 17),
+            label: const Text('COPIAR IP'),
+          ),
+          FilledButton.icon(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              context.read<PagerBloc>().changePage(AppPage.downloads);
+            },
+            icon: const Icon(Icons.download_rounded, size: 17),
+            label: const Text('VER DESCARGAS'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GeoTile(
       color: AppColors.gold,
       padding: const EdgeInsets.all(18),
       semanticLabel: 'Jugar',
-      onTap: () => showDialog<void>(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          backgroundColor: AppColors.ink,
-          title: const Text(
-            'ENTRAR A GOLDEN UNDERWORLD',
-            style: TextStyle(
-              color: AppColors.cream,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Para conectarte necesitas el cliente SA-MP compatible. La integración de conexión se habilitará al configurar y verificar ese cliente.',
-                style: TextStyle(color: AppColors.creamDim, height: 1.45),
-              ),
-              const SizedBox(height: 14),
-              SelectableText(
-                AppConfig.address,
-                style: const TextStyle(
-                  color: AppColors.gold,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton.icon(
-              onPressed: () {
-                copyText(context, AppConfig.address, message: 'Dirección copiada');
-                Navigator.of(dialogContext).pop();
-              },
-              icon: const Icon(Icons.copy_rounded, size: 17),
-              label: const Text('COPIAR IP'),
-            ),
-            FilledButton.icon(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                context.read<PagerBloc>().changePage(AppPage.downloads);
-              },
-              icon: const Icon(Icons.download_rounded, size: 17),
-              label: const Text('VER DESCARGAS'),
-            ),
-          ],
-        ),
-      ),
+      onTap: () => _connect(context),
       decorations: const [
         Positioned(
           top: -34,
