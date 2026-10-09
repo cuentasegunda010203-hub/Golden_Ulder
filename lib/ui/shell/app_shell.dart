@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:artplay_launcher/bloc/ui/pager_bloc.dart';
+import 'package:artplay_launcher/ui/screens/downloads/downloads_screen.dart';
 import 'package:artplay_launcher/ui/screens/home/home_screen.dart';
 import 'package:artplay_launcher/ui/screens/servers/servers_screen.dart';
 import 'package:artplay_launcher/ui/screens/settings/settings_screen.dart';
 import 'package:artplay_launcher/ui/shell/nav_rail.dart';
 
-/// Esqueleto de la app: barra lateral + página activa.
-///
-/// Para añadir una pantalla: 1) valor nuevo en [AppPage], 2) entrada en
-/// [_pages], 3) botón en `AppNavRail._items`.
+/// Esqueleto de la app: navegación lateral + página activa.
 class AppShell extends StatelessWidget {
   const AppShell({super.key});
 
   static const Map<AppPage, Widget> _pages = {
     AppPage.home: HomeScreen(),
     AppPage.servers: ServersScreen(),
+    AppPage.downloads: DownloadsScreen(),
     AppPage.settings: SettingsScreen(),
   };
 
