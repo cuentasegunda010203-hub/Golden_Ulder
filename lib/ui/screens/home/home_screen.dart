@@ -28,6 +28,20 @@ class HomeScreen extends StatelessWidget {
         final state = snapshot.data ?? bloc.currentState;
         final info = state.primary;
 
+        if (MediaQuery.sizeOf(context).width < 650) {
+          return CinematicBackdrop(
+            child: _CompactHome(
+              state: state,
+              info: info,
+              onRefresh: state.isLoading ? null : bloc.refresh,
+              onPlay: () => showAppSnack(
+                context,
+                'El lanzamiento del juego aún no está configurado.',
+              ),
+            ),
+          );
+        }
+
         return CinematicBackdrop(
           child: Padding(
             padding: const EdgeInsets.all(AppMetrics.page),
@@ -105,6 +119,279 @@ class HomeScreen extends StatelessWidget {
           ),
         ));
       },
+    );
+  }
+}
+
+class _CompactHome extends StatelessWidget {
+  const _CompactHome({
+    required this.state,
+    required this.info,
+    required this.onRefresh,
+    required this.onPlay,
+  });
+
+  final ServerState state;
+  final ServerInfo? info;
+  final VoidCallback? onRefresh;
+  final VoidCallback onPlay;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 22),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const _CompactTopBar(),
+          const SizedBox(height: 18),
+          _CompactHero(status: state.status, onPlay: onPlay),
+          const SizedBox(height: 14),
+          _MetricPanel(
+            icon: Icons.groups_2_rounded,
+            label: 'JUGADORES EN LÍNEA',
+            value: info == null ? '—' : '${info.players}',
+            detail: info == null
+                ? 'Esperando respuesta del servidor'
+                : 'de ${info.maxPlayers} plazas disponibles',
+            accent: AppColors.gold,
+          ),
+          const SizedBox(height: 10),
+          _MetricPanel(
+            icon: Icons.speed_rounded,
+            label: 'LATENCIA',
+            value: info?.pingMs == null ? '—' : '${info!.pingMs}',
+            detail: info?.pingMs == null
+                ? 'Sin medición disponible'
+                : 'Conexión en milisegundos',
+            accent: AppColors.cream,
+            suffix: info?.pingMs == null ? null : ' ms',
+          ),
+          const SizedBox(height: 10),
+          _MetricPanel(
+            icon: Icons.sports_esports_rounded,
+            label: 'MODO DE JUEGO',
+            value: info?.gamemode ?? 'ROLEPLAY',
+            detail: info?.language ?? 'San Andreas Multiplayer',
+            accent: AppColors.cream,
+            compactValue: true,
+          ),
+          const SizedBox(height: 12),
+          _FooterBar(isLoading: state.isLoading, onRefresh: onRefresh),
+        ],
+      ),
+    );
+  }
+}
+
+class _CompactTopBar extends StatelessWidget {
+  const _CompactTopBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 39,
+          height: 43,
+          decoration: BoxDecoration(
+            color: AppColors.burgundy,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(4),
+              bottom: Radius.circular(12),
+            ),
+            border: Border.all(color: AppColors.gold, width: 1.1),
+          ),
+          child: const Icon(Icons.shield_rounded, color: AppColors.gold, size: 25),
+        ),
+        const SizedBox(width: 10),
+        const Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'VALDORIA RP',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: AppColors.cream,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              SizedBox(height: 3),
+              Text(
+                'SAN ANDREAS • ROLEPLAY',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: AppColors.creamDim,
+                  fontSize: 8,
+                  letterSpacing: 0.7,
+                ),
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+          tooltip: 'Discord',
+          onPressed: () => openLink(context, AppConfig.discordUrl),
+          icon: const Icon(Icons.forum_outlined, size: 19),
+          color: AppColors.creamDim,
+          visualDensity: VisualDensity.compact,
+        ),
+        IconButton(
+          tooltip: 'Sitio web',
+          onPressed: () => openLink(context, AppConfig.websiteUrl),
+          icon: const Icon(Icons.language_rounded, size: 19),
+          color: AppColors.creamDim,
+          visualDensity: VisualDensity.compact,
+        ),
+      ],
+    );
+  }
+}
+
+class _CompactHero extends StatelessWidget {
+  const _CompactHero({required this.status, required this.onPlay});
+
+  final ServerStatus status;
+  final VoidCallback onPlay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.42)),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.inkRaised.withValues(alpha: 0.75),
+            AppColors.inkDeep.withValues(alpha: 0.88),
+          ],
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 6,
+                height: 6,
+                decoration: const BoxDecoration(
+                  color: AppColors.gold,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'UN NUEVO MUNDO TE ESPERA',
+                style: AppText.label.copyWith(
+                  color: AppColors.gold,
+                  fontSize: 8,
+                  letterSpacing: 1.3,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 22),
+          Text(
+            'TU HISTORIA\nCOMIENZA EN',
+            style: AppText.display.copyWith(
+              color: AppColors.cream,
+              fontSize: 31,
+              height: 1.04,
+            ),
+          ),
+          Text(
+            'VALDORIA.',
+            style: AppText.display.copyWith(
+              color: AppColors.gold,
+              fontSize: 39,
+              height: 1.1,
+              letterSpacing: 0.6,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            AppConfig.tagline,
+            style: AppText.body.copyWith(
+              color: AppColors.creamDim,
+              height: 1.55,
+            ),
+          ),
+          const SizedBox(height: 17),
+          StatusChip(status: status),
+          const SizedBox(height: 10),
+          InkWell(
+            onTap: () => copyText(
+              context,
+              AppConfig.address,
+              message: 'Dirección del servidor copiada',
+            ),
+            borderRadius: BorderRadius.circular(6),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.inkDeep.withValues(alpha: 0.75),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: AppColors.inkLine),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.dns_rounded, color: AppColors.gold, size: 15),
+                  const SizedBox(width: 9),
+                  Expanded(
+                    child: Text(
+                      AppConfig.address,
+                      style: AppText.caption.copyWith(color: AppColors.cream),
+                    ),
+                  ),
+                  const Icon(Icons.copy_rounded, size: 13, color: AppColors.creamDim),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          SizedBox(
+            width: double.infinity,
+            child: Material(
+              color: AppColors.burgundy,
+              borderRadius: BorderRadius.circular(8),
+              child: InkWell(
+                onTap: onPlay,
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.play_arrow_rounded, color: AppColors.gold, size: 22),
+                      const SizedBox(width: 8),
+                      Text(
+                        'JUGAR AHORA',
+                        style: AppText.label.copyWith(
+                          color: AppColors.cream,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.arrow_forward_rounded, color: AppColors.gold, size: 16),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
