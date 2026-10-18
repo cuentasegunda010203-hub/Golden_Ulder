@@ -32,6 +32,20 @@ class HomeScreen extends StatelessWidget {
         // En ventanas bajas, la composición horizontal no tiene altura suficiente
         // para el hero y el panel de acceso. Usa la variante desplazable para evitar
         // RenderFlex overflow en escritorios pequeños o con zoom del sistema.
+        if (viewport.width >= 900 && viewport.height < 720) {
+          return CinematicBackdrop(
+            child: _LandscapeCompactHome(
+              state: state,
+              info: info,
+              onRefresh: state.isLoading ? null : bloc.refresh,
+              onPlay: () => showAppSnack(
+                context,
+                'El lanzamiento del juego aún no está configurado.',
+              ),
+            ),
+          );
+        }
+
         if (viewport.width < 650 || viewport.height < 720) {
           return CinematicBackdrop(
             child: _CompactHome(
@@ -123,6 +137,275 @@ class HomeScreen extends StatelessWidget {
           ),
         ));
       },
+    );
+  }
+}
+
+class _LandscapeCompactHome extends StatelessWidget {
+  const _LandscapeCompactHome({
+    required this.state,
+    required this.info,
+    required this.onRefresh,
+    required this.onPlay,
+  });
+
+  final ServerState state;
+  final ServerInfo? info;
+  final VoidCallback? onRefresh;
+  final VoidCallback onPlay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const _CompactTopBar(),
+          const SizedBox(height: 12),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  flex: 7,
+                  child: _LandscapeHeadline(status: state.status),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  flex: 4,
+                  child: _LandscapePlayCard(onPlay: onPlay),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _MetricPanel(
+                  icon: Icons.groups_2_rounded,
+                  label: 'JUGADORES',
+                  value: info == null ? '—' : '${info!.players}',
+                  detail: info == null
+                      ? 'Esperando respuesta'
+                      : 'de ${info!.maxPlayers} plazas',
+                  accent: AppColors.gold,
+                  fixedHeight: 88,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _MetricPanel(
+                  icon: Icons.speed_rounded,
+                  label: 'LATENCIA',
+                  value: info?.pingMs == null ? '—' : '${info!.pingMs}',
+                  detail: info?.pingMs == null
+                      ? 'Sin medición'
+                      : 'Conexión en ms',
+                  accent: AppColors.cream,
+                  suffix: info?.pingMs == null ? null : ' ms',
+                  fixedHeight: 88,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _MetricPanel(
+                  icon: Icons.sports_esports_rounded,
+                  label: 'MODO DE JUEGO',
+                  value: info?.gamemode ?? 'ROLEPLAY',
+                  detail: info?.language ?? 'San Andreas Multiplayer',
+                  accent: AppColors.cream,
+                  compactValue: true,
+                  fixedHeight: 88,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          _FooterBar(isLoading: state.isLoading, onRefresh: onRefresh),
+        ],
+      ),
+    );
+  }
+}
+
+class _LandscapeHeadline extends StatelessWidget {
+  const _LandscapeHeadline({required this.status});
+
+  final ServerStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
+      decoration: BoxDecoration(
+        color: AppColors.inkDeep.withValues(alpha: 0.66),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.42)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 6,
+                height: 6,
+                decoration: const BoxDecoration(
+                  color: AppColors.gold,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'UN NUEVO MUNDO TE ESPERA',
+                style: AppText.label.copyWith(
+                  color: AppColors.gold,
+                  fontSize: 9,
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'TU HISTORIA COMIENZA EN',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.display.copyWith(
+              color: AppColors.cream,
+              fontSize: 25,
+              height: 1.08,
+              letterSpacing: -0.4,
+            ),
+          ),
+          Text(
+            'VALDORIA.',
+            style: AppText.display.copyWith(
+              color: AppColors.gold,
+              fontSize: 39,
+              height: 1.04,
+              letterSpacing: 0.5,
+            ),
+          ),
+          const SizedBox(height: 9),
+          Text(
+            AppConfig.tagline,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.body.copyWith(
+              color: AppColors.creamDim,
+              fontSize: 11,
+            ),
+          ),
+          const SizedBox(height: 12),
+          StatusChip(status: status),
+        ],
+      ),
+    );
+  }
+}
+
+class _LandscapePlayCard extends StatelessWidget {
+  const _LandscapePlayCard({required this.onPlay});
+
+  final VoidCallback onPlay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppColors.burgundy.withValues(alpha: 0.94),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.72)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.inkDeep.withValues(alpha: 0.28),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.gold,
+                  borderRadius: BorderRadius.circular(9),
+                ),
+                child: const Icon(
+                  Icons.play_arrow_rounded,
+                  size: 32,
+                  color: AppColors.inkDeep,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'ENTRAR AL\nSERVIDOR',
+                  style: AppText.display.copyWith(
+                    color: AppColors.cream,
+                    fontSize: 21,
+                    height: 1.06,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Tu próxima historia comienza aquí.',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.body.copyWith(
+              color: AppColors.creamDim,
+              fontSize: 11,
+            ),
+          ),
+          const SizedBox(height: 13),
+          SizedBox(
+            width: double.infinity,
+            height: 42,
+            child: Material(
+              color: AppColors.gold,
+              borderRadius: BorderRadius.circular(7),
+              child: InkWell(
+                onTap: onPlay,
+                borderRadius: BorderRadius.circular(7),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'JUGAR AHORA',
+                      style: AppText.label.copyWith(
+                        color: AppColors.inkDeep,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.1,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 15,
+                      color: AppColors.inkDeep,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
