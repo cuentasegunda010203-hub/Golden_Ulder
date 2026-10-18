@@ -32,9 +32,12 @@ class ServerTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.ink,
-      clipBehavior: Clip.hardEdge,
-      // Barra dorada a la izquierda (acento de la plantilla).
-      shape: const Border(left: BorderSide(color: AppColors.gold, width: 5)),
+      borderRadius: BorderRadius.circular(8),
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: const BorderSide(color: AppColors.inkLine),
+      ),
       child: InkWell(
         onTap: onTap,
         splashColor: AppColors.cream.withValues(alpha: 0.10),
@@ -43,6 +46,8 @@ class ServerTile extends StatelessWidget {
           child: Row(
             children: [
               // Nombre + dirección
+              Container(width: 3, height: 38, color: AppColors.gold),
+              const SizedBox(width: 13),
               Expanded(
                 flex: 5,
                 child: Column(
