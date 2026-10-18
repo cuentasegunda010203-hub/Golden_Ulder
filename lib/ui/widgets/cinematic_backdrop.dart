@@ -40,8 +40,8 @@ class _CinematicBackdropState extends State<CinematicBackdrop>
             final height = constraints.maxHeight;
             if (width <= 0 || height <= 0) return;
             final next = Offset(
-              (event.localPosition.dx / width).clamp(0.0, 1.0),
-              (event.localPosition.dy / height).clamp(0.0, 1.0),
+              (event.localPosition.dx / width).clamp(0.0, 1.0).toDouble(),
+              (event.localPosition.dy / height).clamp(0.0, 1.0).toDouble(),
             );
             if ((next - _pointer).distance > 0.025) {
               setState(() => _pointer = next);
