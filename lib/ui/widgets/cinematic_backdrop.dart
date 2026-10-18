@@ -209,7 +209,7 @@ class _ValdoriaCityPainter extends CustomPainter {
     required bool windows,
   }) {
     final path = Path()..moveTo(0, baseline);
-    final step = math.max(17.0, size.width / 38);
+    final step = math.max(17.0, size.width / 38).toDouble();
     var index = 0;
     for (double x = 0; x <= size.width + step; x += step) {
       final variation = ((index * 37) % 11) / 11;
@@ -236,8 +236,8 @@ class _ValdoriaCityPainter extends CustomPainter {
       final buildingHeight = size.height * heightFactor * (0.32 + variation * 0.68);
       for (var row = 0; row < 5; row++) {
         for (var col = 0; col < 2; col++) {
-          final wx = x + col * 6 + (index.isEven ? 1 : 4);
-          final wy = baseline - buildingHeight + 12 + row * 12;
+          final wx = (x + col * 6 + (index.isEven ? 1 : 4)).toDouble();
+          final wy = (baseline - buildingHeight + 12 + row * 12).toDouble();
           if (wy < baseline - 4 && wx < size.width) {
             final shimmer = 0.18 +
                 0.2 *
