@@ -1,10 +1,10 @@
-# Golden Underworld RP · Launcher
+# Valdoria RP · Launcher
 
-Launcher móvil (Android) para el servidor de rol **Golden Underworld RP** de SA-MP, hecho con Dart y Flutter.
+Launcher móvil (Android) para el servidor de rol **Valdoria RP** de SA-MP, hecho con Dart y Flutter.
 
 ![Maqueta del diseño](docs/design/mockup.png)
 
-> La imagen es una maqueta de referencia del diseño (negro · dorado · crema), no una captura de pantalla.
+> La maqueta original es una referencia visual anterior; la identidad actual se está migrando a azul noche, borgoña, oro y marfil.
 
 ## Compilar
 
@@ -20,7 +20,7 @@ También puedes generar el APK de depuración desde **Actions → Build APK → 
 
 ## Configuración rápida
 
-Todo lo editable (nombre, IP, puerto, enlaces de Discord y web) está en
+Todo lo editable (nombre, IP, puerto y enlaces de Discord y web) está en
 [`lib/config/app_config.dart`](lib/config/app_config.dart).
 
 ## Estructura
@@ -42,6 +42,8 @@ lib/
 ```
 
 Guía de diseño: [`docs/DESIGN.md`](docs/DESIGN.md).
+
+La rama `feat/valdoria-rp-branding` contiene la primera etapa de identidad visual. Se conserva la dirección y el puerto actuales del servidor.
 
 ## Créditos y licencia
 
