@@ -34,7 +34,19 @@ class _CinematicBackdropState extends State<CinematicBackdrop>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return MouseRegion(
+        return Listener(
+          onPointerDown: (event) {
+            final width = constraints.maxWidth;
+            final height = constraints.maxHeight;
+            if (width <= 0 || height <= 0) return;
+            setState(() {
+              _pointer = Offset(
+                (event.localPosition.dx / width).clamp(0.0, 1.0).toDouble(),
+                (event.localPosition.dy / height).clamp(0.0, 1.0).toDouble(),
+              );
+            });
+          },
+          child: MouseRegion(
           onHover: (event) {
             final width = constraints.maxWidth;
             final height = constraints.maxHeight;
@@ -76,6 +88,7 @@ class _CinematicBackdropState extends State<CinematicBackdrop>
               ),
               widget.child,
             ],
+          ),
           ),
         );
       },
