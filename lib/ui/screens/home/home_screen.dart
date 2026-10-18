@@ -28,7 +28,11 @@ class HomeScreen extends StatelessWidget {
         final state = snapshot.data ?? bloc.currentState;
         final info = state.primary;
 
-        if (MediaQuery.sizeOf(context).width < 650) {
+        final viewport = MediaQuery.sizeOf(context);
+        // En ventanas bajas, la composición horizontal no tiene altura suficiente
+        // para el hero y el panel de acceso. Usa la variante desplazable para evitar
+        // RenderFlex overflow en escritorios pequeños o con zoom del sistema.
+        if (viewport.width < 650 || viewport.height < 640) {
           return CinematicBackdrop(
             child: _CompactHome(
               state: state,
