@@ -69,12 +69,10 @@ class HomeScreen extends StatelessWidget {
                                   child: _MetricPanel(
                                     icon: Icons.speed_rounded,
                                     label: 'LATENCIA',
-                                    value: info == null
-                                        ? '—'
-                                        : '${info.pingMs}',
-                                    detail: info == null ? 'ms' : 'milisegundos',
+                                    value: info?.pingMs == null ? '—' : '${info!.pingMs}',
+                                    detail: info?.pingMs == null ? 'Sin datos' : 'milisegundos',
                                     accent: AppColors.cream,
-                                    suffix: info == null ? null : ' ms',
+                                    suffix: info?.pingMs == null ? null : ' ms',
                                   ),
                                 ),
                                 const SizedBox(width: 12),
