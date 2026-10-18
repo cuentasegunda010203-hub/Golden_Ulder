@@ -29,7 +29,7 @@ class SettingsScreen extends StatelessWidget {
                       children: [
                         const _PreferencesPanel(),
                         const SizedBox(height: 12),
-                        const SizedBox(height: 220, child: _BrandPanel()),
+                        const SizedBox(height: 260, child: _BrandPanel()),
                       ],
                     ),
                   );
