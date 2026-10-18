@@ -2,8 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import 'package:artplay_launcher/ui/theme/app_colors.dart';
-
 /// Paisaje urbano tropical original inspirado en simuladores de ciudad móvil:
 /// costa, montañas, barrios coloridos, palmeras y luz cálida. Todo se pinta
 /// localmente, responde al tacto/ratón y no descarga imágenes externas.
