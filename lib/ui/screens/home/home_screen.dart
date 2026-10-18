@@ -73,10 +73,10 @@ class HomeScreen extends StatelessWidget {
                             child: _MetricPanel(
                               icon: Icons.groups_2_rounded,
                               label: 'JUGADORES EN LÍNEA',
-                              value: info == null ? '—' : '${info.players}',
+                              value: info == null ? '—' : '${info!.players}',
                               detail: info == null
                                   ? 'Esperando respuesta del servidor'
-                                  : 'de ${info.maxPlayers} plazas disponibles',
+                                  : 'de ${info!.maxPlayers} plazas disponibles',
                               accent: AppColors.gold,
                             ),
                           ),
