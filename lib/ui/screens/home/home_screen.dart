@@ -35,108 +35,59 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const _TopBar(),
-              const SizedBox(height: 16),
+              const SizedBox(height: 22),
               Expanded(
-                child: Row(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
                       flex: 7,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            flex: 6,
-                            child: _WelcomePanel(status: state.status),
-                          ),
-                          const SizedBox(height: 12),
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: _MetricPanel(
-                                    icon: Icons.groups_2_rounded,
-                                    label: 'JUGADORES',
-                                    value: info == null
-                                        ? '—'
-                                        : '${info.players}',
-                                    detail: info == null
-                                        ? 'Esperando respuesta'
-                                        : 'de ${info.maxPlayers} plazas',
-                                    accent: AppColors.gold,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _MetricPanel(
-                                    icon: Icons.speed_rounded,
-                                    label: 'LATENCIA',
-                                    value: info?.pingMs == null ? '—' : '${info!.pingMs}',
-                                    detail: info?.pingMs == null ? 'Sin datos' : 'milisegundos',
-                                    accent: AppColors.cream,
-                                    suffix: info?.pingMs == null ? null : ' ms',
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _MetricPanel(
-                                    icon: Icons.sports_esports_rounded,
-                                    label: 'MODO DE JUEGO',
-                                    value: info?.gamemode ?? '—',
-                                    detail: info?.language ?? 'San Andreas Multiplayer',
-                                    accent: AppColors.cream,
-                                    compactValue: true,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                      child: _CinematicHero(
+                        status: state.status,
+                        onPlay: () => showAppSnack(
+                          context,
+                          'El lanzamiento del juego aún no está configurado.',
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(height: 14),
                     Expanded(
                       flex: 3,
-                      child: Column(
+                      child: Row(
                         children: [
                           Expanded(
-                            flex: 7,
-                            child: _PlayPanel(onTap: () {
-                              showAppSnack(
-                                context,
-                                'El lanzamiento del juego aún no está configurado.',
-                              );
-                            }),
+                            child: _MetricPanel(
+                              icon: Icons.groups_2_rounded,
+                              label: 'JUGADORES EN LÍNEA',
+                              value: info == null ? '—' : '${info.players}',
+                              detail: info == null
+                                  ? 'Esperando respuesta del servidor'
+                                  : 'de ${info.maxPlayers} plazas disponibles',
+                              accent: AppColors.gold,
+                            ),
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(width: 12),
                           Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: _QuickLink(
-                                    icon: Icons.forum_rounded,
-                                    label: 'DISCORD',
-                                    enabled: AppConfig.discordUrl != null,
-                                    onTap: () => openLink(
-                                      context,
-                                      AppConfig.discordUrl,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: _QuickLink(
-                                    icon: Icons.language_rounded,
-                                    label: 'SITIO WEB',
-                                    enabled: AppConfig.websiteUrl != null,
-                                    onTap: () => openLink(
-                                      context,
-                                      AppConfig.websiteUrl,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            child: _MetricPanel(
+                              icon: Icons.speed_rounded,
+                              label: 'LATENCIA',
+                              value: info?.pingMs == null ? '—' : '${info!.pingMs}',
+                              detail: info?.pingMs == null
+                                  ? 'Sin medición disponible'
+                                  : 'Conexión en milisegundos',
+                              accent: AppColors.cream,
+                              suffix: info?.pingMs == null ? null : ' ms',
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _MetricPanel(
+                              icon: Icons.sports_esports_rounded,
+                              label: 'MODO DE JUEGO',
+                              value: info?.gamemode ?? 'ROLEPLAY',
+                              detail: info?.language ?? 'San Andreas Multiplayer',
+                              accent: AppColors.cream,
+                              compactValue: true,
                             ),
                           ),
                         ],
@@ -154,6 +105,324 @@ class HomeScreen extends StatelessWidget {
           ),
         ));
       },
+    );
+  }
+}
+
+class _CinematicHero extends StatelessWidget {
+  const _CinematicHero({required this.status, required this.onPlay});
+
+  final ServerStatus status;
+  final VoidCallback onPlay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.36)),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.inkRaised.withValues(alpha: 0.48),
+            AppColors.inkDeep.withValues(alpha: 0.66),
+          ],
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            right: 20,
+            top: -36,
+            child: Text(
+              'V',
+              style: TextStyle(
+                fontSize: 330,
+                height: 1,
+                fontWeight: FontWeight.w700,
+                color: AppColors.cream.withValues(alpha: 0.035),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: 4,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.gold.withValues(alpha: 0.05),
+                    AppColors.gold,
+                    AppColors.burgundy,
+                    AppColors.burgundy.withValues(alpha: 0.05),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 25, 28, 25),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 7,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: const BoxDecoration(
+                              color: AppColors.gold,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 9),
+                          Text(
+                            'UN NUEVO MUNDO TE ESPERA',
+                            style: AppText.label.copyWith(
+                              color: AppColors.gold,
+                              letterSpacing: 2.0,
+                              fontSize: 9,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'TU HISTORIA\nCOMIENZA EN',
+                        style: AppText.display.copyWith(
+                          color: AppColors.cream,
+                          fontSize: 35,
+                          height: 1.02,
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'VALDORIA.',
+                        style: AppText.display.copyWith(
+                          color: AppColors.gold,
+                          fontSize: 43,
+                          height: 1.06,
+                          letterSpacing: 1.1,
+                        ),
+                      ),
+                      const SizedBox(height: 13),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 430),
+                        child: Text(
+                          AppConfig.tagline,
+                          style: AppText.body.copyWith(
+                            color: AppColors.creamDim,
+                            height: 1.6,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(height: 19),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          StatusChip(status: status),
+                          InkWell(
+                            onTap: () => copyText(
+                              context,
+                              AppConfig.address,
+                              message: 'Dirección del servidor copiada',
+                            ),
+                            borderRadius: BorderRadius.circular(6),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 11,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.inkDeep.withValues(alpha: 0.72),
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: AppColors.inkLine),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.dns_rounded,
+                                    size: 14,
+                                    color: AppColors.gold,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    AppConfig.address,
+                                    style: AppText.caption.copyWith(
+                                      color: AppColors.cream,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Icon(
+                                    Icons.copy_rounded,
+                                    size: 12,
+                                    color: AppColors.creamDim,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 24),
+                Expanded(
+                  flex: 4,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 260),
+                      child: _HeroActionCard(onTap: onPlay),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeroActionCard extends StatefulWidget {
+  const _HeroActionCard({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  State<_HeroActionCard> createState() => _HeroActionCardState();
+}
+
+class _HeroActionCardState extends State<_HeroActionCard> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+        transform: Matrix4.translationValues(0, _hovered ? -4 : 0, 0),
+        padding: const EdgeInsets.all(19),
+        decoration: BoxDecoration(
+          color: _hovered ? AppColors.burgundy : AppColors.burgundy.withValues(alpha: 0.88),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: AppColors.gold.withValues(alpha: _hovered ? 0.95 : 0.58),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.burgundy.withValues(alpha: _hovered ? 0.32 : 0.12),
+              blurRadius: _hovered ? 26 : 12,
+              spreadRadius: _hovered ? 1 : 0,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 49,
+              height: 49,
+              decoration: BoxDecoration(
+                color: AppColors.gold,
+                borderRadius: BorderRadius.circular(9),
+              ),
+              child: const Icon(
+                Icons.play_arrow_rounded,
+                size: 34,
+                color: AppColors.inkDeep,
+              ),
+            ),
+            const SizedBox(height: 23),
+            Text(
+              'ENTRAR AL\nSERVIDOR',
+              style: AppText.display.copyWith(
+                color: AppColors.cream,
+                fontSize: 24,
+                height: 1.12,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Conecta con la ciudad y empieza tu próxima vida.',
+              style: AppText.body.copyWith(
+                color: AppColors.creamDim,
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 21),
+            Material(
+              color: AppColors.gold,
+              borderRadius: BorderRadius.circular(7),
+              child: InkWell(
+                onTap: widget.onTap,
+                borderRadius: BorderRadius.circular(7),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 13),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'JUGAR AHORA',
+                        style: AppText.label.copyWith(
+                          color: AppColors.inkDeep,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                      const SizedBox(width: 9),
+                      const Icon(
+                        Icons.arrow_forward_rounded,
+                        color: AppColors.inkDeep,
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 11),
+            Center(
+              child: Text(
+                'SA-MP  •  ROLEPLAY HISPANO',
+                style: AppText.label.copyWith(
+                  color: AppColors.creamDim,
+                  fontSize: 8,
+                  letterSpacing: 0.8,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
