@@ -9,6 +9,7 @@ import 'package:artplay_launcher/ui/theme/app_colors.dart';
 import 'package:artplay_launcher/ui/theme/app_metrics.dart';
 import 'package:artplay_launcher/ui/theme/app_theme.dart';
 import 'package:artplay_launcher/ui/utils/actions.dart';
+import 'package:artplay_launcher/ui/widgets/cinematic_backdrop.dart';
 import 'package:artplay_launcher/ui/widgets/status_chip.dart';
 
 /// Dashboard de Valdoria RP: estética clásica de launcher de PC,
@@ -27,8 +28,9 @@ class HomeScreen extends StatelessWidget {
         final state = snapshot.data ?? bloc.currentState;
         final info = state.primary;
 
-        return Padding(
-          padding: const EdgeInsets.all(AppMetrics.page),
+        return CinematicBackdrop(
+          child: Padding(
+            padding: const EdgeInsets.all(AppMetrics.page),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -150,7 +152,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-        );
+        ));
       },
     );
   }
@@ -245,10 +247,13 @@ class _WelcomePanel extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(9),
         border: Border.all(color: AppColors.inkLine),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AppColors.inkRaised, AppColors.ink],
+          colors: [
+            AppColors.inkRaised.withValues(alpha: 0.78),
+            AppColors.ink.withValues(alpha: 0.88),
+          ],
         ),
       ),
       child: Stack(
