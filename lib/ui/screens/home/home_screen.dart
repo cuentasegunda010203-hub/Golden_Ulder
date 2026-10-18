@@ -13,7 +13,7 @@ import 'package:artplay_launcher/ui/widgets/geo_shapes.dart';
 import 'package:artplay_launcher/ui/widgets/geo_tile.dart';
 import 'package:artplay_launcher/ui/widgets/status_chip.dart';
 
-/// Pantalla de inicio: mosaico de paneles (estilo plantilla geométrica).
+/// Pantalla de inicio de Valdoria RP con identidad heráldica y paneles geométricos.
 ///
 /// ```
 /// ┌──────────────── hero ───────────────┬──── JUGAR ────┐
@@ -145,9 +145,34 @@ class _HeroTile extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'SA-MP · ROLEPLAY',
-                style: AppText.label.copyWith(color: AppColors.gold),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 28,
+                    height: 32,
+                    decoration: const BoxDecoration(
+                      color: AppColors.burgundy,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(3),
+                        bottom: Radius.circular(10),
+                      ),
+                      border: Border.fromBorderSide(
+                        BorderSide(color: AppColors.gold, width: 1.2),
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.shield_rounded,
+                      color: AppColors.gold,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 9),
+                  Text(
+                    'VALDORIA RP · SA-MP',
+                    style: AppText.label.copyWith(color: AppColors.gold),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               FittedBox(
