@@ -33,7 +33,7 @@
     <application
         android:name="${applicationName}"
         android:label="Valdoria RP"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_valdoria_launcher"
         android:allowBackup="true"
         android:isGame="true"
         android:appCategory="game"
