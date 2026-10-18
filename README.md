@@ -4,7 +4,7 @@ Launcher móvil (Android) para el servidor de rol **Valdoria RP** de SA-MP, hech
 
 ![Maqueta del diseño](docs/design/mockup.png)
 
-> La maqueta original es una referencia visual anterior; la identidad actual se está migrando a azul noche, borgoña, oro y marfil.
+El fondo actual dibuja una ciudad tropical costera original: luz cálida, montañas, edificios, barrios de colores y palmeras, con movimiento ambiental y parallax táctil. La marca conserva borgoña y oro.
 
 ## Compilar
 
