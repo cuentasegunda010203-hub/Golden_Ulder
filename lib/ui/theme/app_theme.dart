@@ -108,12 +108,12 @@ abstract class AppTheme {
     return base.copyWith(
       scaffoldBackgroundColor: AppColors.inkDeep,
       textTheme: textTheme,
-      // Estética Bauhaus: esquinas rectas en todo el sistema.
+      // Estética clásica: esquinas suaves y discretas, con superficies profundas.
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.gold,
           foregroundColor: AppColors.ink,
-          shape: const RoundedRectangleBorder(),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           textStyle: AppText.button,
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
         ),
@@ -122,8 +122,26 @@ abstract class AppTheme {
         backgroundColor: AppColors.cream,
         contentTextStyle: AppText.body.copyWith(color: AppColors.ink),
         behavior: SnackBarBehavior.floating,
-        shape: const RoundedRectangleBorder(),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         width: 360,
+      ),
+      dividerTheme: const DividerThemeData(
+        color: AppColors.inkLine,
+        thickness: 1,
+        space: 1,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.ink,
+        labelStyle: AppText.body.copyWith(color: AppColors.creamDim),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6),
+          borderSide: const BorderSide(color: AppColors.inkLine),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6),
+          borderSide: const BorderSide(color: AppColors.gold, width: 1.4),
+        ),
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: AppColors.gold,

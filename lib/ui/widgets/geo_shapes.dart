@@ -39,11 +39,11 @@ class StripesPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(StripesPainter old) =>
-      old.color != color ||
-      old.count != count ||
-      old.thickness != thickness ||
-      old.vertical != vertical;
+  bool shouldRepaint(StripesPainter oldDelegate) =>
+      oldDelegate.color != color ||
+      oldDelegate.count != count ||
+      oldDelegate.thickness != thickness ||
+      oldDelegate.vertical != vertical;
 }
 
 /// Círculos (o cuadrados) concéntricos, solo contorno.
@@ -81,11 +81,11 @@ class ConcentricPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(ConcentricPainter old) =>
-      old.color != color ||
-      old.rings != rings ||
-      old.square != square ||
-      old.strokeWidth != strokeWidth;
+  bool shouldRepaint(ConcentricPainter oldDelegate) =>
+      oldDelegate.color != color ||
+      oldDelegate.rings != rings ||
+      oldDelegate.square != square ||
+      oldDelegate.strokeWidth != strokeWidth;
 }
 
 /// Asterisco de 8 puntas (el de la plantilla).
@@ -112,8 +112,8 @@ class AsteriskPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(AsteriskPainter old) =>
-      old.color != color || old.strokeWidth != strokeWidth;
+  bool shouldRepaint(AsteriskPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth;
 }
 
 /// Medidor circular (p. ej. ocupación de jugadores).
@@ -156,11 +156,11 @@ class RingGaugePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(RingGaugePainter old) =>
-      old.value != value ||
-      old.color != color ||
-      old.trackColor != trackColor ||
-      old.strokeWidth != strokeWidth;
+  bool shouldRepaint(RingGaugePainter oldDelegate) =>
+      oldDelegate.value != value ||
+      oldDelegate.color != color ||
+      oldDelegate.trackColor != trackColor ||
+      oldDelegate.strokeWidth != strokeWidth;
 }
 
 /// Barras de señal (calidad de conexión). [level] va de 0 a [bars].
@@ -198,11 +198,11 @@ class SignalBarsPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(SignalBarsPainter old) =>
-      old.level != level ||
-      old.activeColor != activeColor ||
-      old.inactiveColor != inactiveColor ||
-      old.bars != bars;
+  bool shouldRepaint(SignalBarsPainter oldDelegate) =>
+      oldDelegate.level != level ||
+      oldDelegate.activeColor != activeColor ||
+      oldDelegate.inactiveColor != inactiveColor ||
+      oldDelegate.bars != bars;
 }
 
 /// Hacia dónde "mira" el semicírculo (lado curvo).
@@ -244,6 +244,6 @@ class HalfDiscPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(HalfDiscPainter old) =>
-      old.color != color || old.facing != facing;
+  bool shouldRepaint(HalfDiscPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.facing != facing;
 }

@@ -34,7 +34,7 @@ class _ServersState extends State<Servers> {
           // Capa oscura para mejorar legibilidad
           Positioned.fill(
             child: Container(
-              color: Colors.black.withOpacity(0.55),
+              color: Colors.black.withValues(alpha: 0.55),
             ),
           ),
           // Contenido Principal Responsivo
@@ -81,7 +81,7 @@ class _ServersState extends State<Servers> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.2),
+                          color: Colors.green.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.greenAccent, width: 1),
                         ),
@@ -115,15 +115,15 @@ class _ServersState extends State<Servers> {
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF141414).withOpacity(0.85),
+                              color: const Color(0xFF141414).withValues(alpha: 0.85),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: const Color(0xFFFFD700).withOpacity(0.35),
+                                color: const Color(0xFFFFD700).withValues(alpha: 0.35),
                                 width: 1.5,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
+                                  color: Colors.black.withValues(alpha: 0.5),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 )
@@ -173,7 +173,7 @@ class _ServersState extends State<Servers> {
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     elevation: 6,
-                                    shadowColor: const Color(0xFFFFD700).withOpacity(0.4),
+                                    shadowColor: const Color(0xFFFFD700).withValues(alpha: 0.4),
                                   ),
                                   onPressed: () {
                                     // Lógica de conexión o descarga
@@ -246,7 +246,7 @@ class _ServersState extends State<Servers> {
   Widget _buildSocialButton(IconData icon, String label, VoidCallback onTap) {
     return Expanded(
       child: Material(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: onTap,

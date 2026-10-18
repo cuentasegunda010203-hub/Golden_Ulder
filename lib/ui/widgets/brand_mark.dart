@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:artplay_launcher/ui/theme/app_colors.dart';
-import 'package:artplay_launcher/ui/widgets/geo_shapes.dart';
 
-/// Marca del launcher: cuadrado oscuro con asterisco dorado.
-///
-/// (Fondo oscuro a propósito: así no se funde con el botón dorado de la
-/// página seleccionada en la barra lateral.)
-///
-/// Es un marcador de posición dibujado por código. Cuando exista un logo
-/// vectorial/transparente del servidor, se sustituye aquí y se actualiza
-/// en todas las pantallas a la vez.
+/// Emblema compacto de Valdoria RP, compartido por la navegación.
 class BrandMark extends StatelessWidget {
   const BrandMark({super.key, required this.size});
 
@@ -20,15 +12,32 @@ class BrandMark extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox.square(
       dimension: size,
-      child: ColoredBox(
-        color: AppColors.inkRaised,
-        child: Padding(
-          padding: EdgeInsets.all(size * 0.24),
-          child: CustomPaint(
-            painter: AsteriskPainter(
-              color: AppColors.gold,
-              strokeWidth: size * 0.055,
+      child: Center(
+        child: Container(
+          width: size * 0.62,
+          height: size * 0.70,
+          decoration: BoxDecoration(
+            color: AppColors.burgundy,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(size * 0.05),
+              bottom: Radius.circular(size * 0.20),
             ),
+            border: Border.all(
+              color: AppColors.gold,
+              width: size * 0.018,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.burgundy.withValues(alpha: 0.28),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Icon(
+            Icons.shield_rounded,
+            size: size * 0.39,
+            color: AppColors.gold,
           ),
         ),
       ),

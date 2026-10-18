@@ -28,10 +28,17 @@ class AppNavRail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: AppMetrics.railWidth,
-      color: AppColors.ink,
+      decoration: const BoxDecoration(
+        color: AppColors.inkDeep,
+        border: Border(right: BorderSide(color: AppColors.inkLine, width: 1)),
+      ),
       child: Column(
         children: [
+          const SizedBox(height: 8),
           const BrandMark(size: AppMetrics.railWidth),
+          const SizedBox(height: 12),
+          Container(height: 1, color: AppColors.inkLine),
+          const SizedBox(height: 8),
           for (final item in _items)
             _RailButton(
               item: item,
@@ -65,7 +72,7 @@ class _RailButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foreground = selected ? AppColors.ink : AppColors.creamDim;
+    final foreground = selected ? AppColors.gold : AppColors.creamDim;
 
     return Semantics(
       button: true,
@@ -75,7 +82,15 @@ class _RailButton extends StatelessWidget {
         duration: const Duration(milliseconds: 180),
         height: AppMetrics.railItemHeight,
         width: double.infinity,
-        color: selected ? AppColors.gold : Colors.transparent,
+        decoration: BoxDecoration(
+          color: selected ? AppColors.inkRaised : Colors.transparent,
+          border: Border(
+            left: BorderSide(
+              color: selected ? AppColors.gold : Colors.transparent,
+              width: 3,
+            ),
+          ),
+        ),
         child: Material(
           type: MaterialType.transparency,
           child: InkWell(
@@ -89,7 +104,7 @@ class _RailButton extends StatelessWidget {
                 Text(
                   item.label,
                   style: AppText.label.copyWith(
-                    color: foreground,
+                    color: selected ? AppColors.cream : foreground,
                     fontSize: 9.5,
                     letterSpacing: 0.4,
                     fontWeight: selected ? FontWeight.w700 : FontWeight.w500,

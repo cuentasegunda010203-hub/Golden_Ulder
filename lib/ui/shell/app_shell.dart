@@ -6,11 +6,10 @@ import 'package:artplay_launcher/ui/screens/home/home_screen.dart';
 import 'package:artplay_launcher/ui/screens/servers/servers_screen.dart';
 import 'package:artplay_launcher/ui/screens/settings/settings_screen.dart';
 import 'package:artplay_launcher/ui/shell/nav_rail.dart';
+import 'package:artplay_launcher/ui/theme/app_colors.dart';
 
-/// Esqueleto de la app: barra lateral + página activa.
-///
-/// Para añadir una pantalla: 1) valor nuevo en [AppPage], 2) entrada en
-/// [_pages], 3) botón en `AppNavRail._items`.
+/// Navegación adaptable: rail premium en pantallas amplias y barra inferior
+/// cómoda en Android vertical.
 class AppShell extends StatelessWidget {
   const AppShell({super.key});
 
@@ -19,6 +18,24 @@ class AppShell extends StatelessWidget {
     AppPage.servers: ServersScreen(),
     AppPage.settings: SettingsScreen(),
   };
+
+  static const _destinations = <NavigationDestination>[
+    NavigationDestination(
+      icon: Icon(Icons.home_outlined),
+      selectedIcon: Icon(Icons.home_rounded),
+      label: 'Inicio',
+    ),
+    NavigationDestination(
+      icon: Icon(Icons.dns_outlined),
+      selectedIcon: Icon(Icons.dns_rounded),
+      label: 'Servidores',
+    ),
+    NavigationDestination(
+      icon: Icon(Icons.tune_outlined),
+      selectedIcon: Icon(Icons.tune_rounded),
+      label: 'Ajustes',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -31,20 +48,48 @@ class AppShell extends StatelessWidget {
           initialData: pager.currentPage,
           builder: (context, snapshot) {
             final page = snapshot.data ?? AppPage.home;
-
-            return Row(
-              children: [
-                AppNavRail(current: page, onSelected: pager.changePage),
-                Expanded(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 220),
-                    child: KeyedSubtree(
-                      key: ValueKey(page),
-                      child: _pages[page]!,
-                    ),
-                  ),
+            final content = Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 260),
+                switchInCurve: Curves.easeOutCubic,
+                switchOutCurve: Curves.easeInCubic,
+                child: KeyedSubtree(
+                  key: ValueKey(page),
+                  child: _pages[page]!,
                 ),
-              ],
+              ),
+            );
+
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                if (constraints.maxWidth < 720) {
+                  return Column(
+                    children: [
+                      content,
+                      NavigationBar(
+                        height: 66,
+                        selectedIndex: AppPage.values.indexOf(page),
+                        onDestinationSelected: (index) =>
+                            pager.changePage(AppPage.values[index]),
+                        destinations: _destinations,
+                        backgroundColor: AppColors.inkDeep,
+                        indicatorColor: AppColors.burgundy.withValues(alpha: 0.55),
+                        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+                      ),
+                    ],
+                  );
+                }
+
+                return Row(
+                  children: [
+                    AppNavRail(
+                      current: page,
+                      onSelected: pager.changePage,
+                    ),
+                    content,
+                  ],
+                );
+              },
             );
           },
         ),
