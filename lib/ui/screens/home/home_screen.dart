@@ -155,6 +155,7 @@ class _CompactHome extends StatelessWidget {
                 ? 'Esperando respuesta del servidor'
                 : 'de ${info.maxPlayers} plazas disponibles',
             accent: AppColors.gold,
+            fixedHeight: 94,
           ),
           const SizedBox(height: 10),
           _MetricPanel(
@@ -166,6 +167,7 @@ class _CompactHome extends StatelessWidget {
                 : 'Conexión en milisegundos',
             accent: AppColors.cream,
             suffix: info?.pingMs == null ? null : ' ms',
+            fixedHeight: 94,
           ),
           const SizedBox(height: 10),
           _MetricPanel(
@@ -175,6 +177,7 @@ class _CompactHome extends StatelessWidget {
             detail: info?.language ?? 'San Andreas Multiplayer',
             accent: AppColors.cream,
             compactValue: true,
+            fixedHeight: 94,
           ),
           const SizedBox(height: 12),
           _FooterBar(isLoading: state.isLoading, onRefresh: onRefresh),
@@ -815,6 +818,7 @@ class _MetricPanel extends StatelessWidget {
     required this.accent,
     this.suffix,
     this.compactValue = false,
+    this.fixedHeight,
   });
 
   final IconData icon;
@@ -824,10 +828,12 @@ class _MetricPanel extends StatelessWidget {
   final Color accent;
   final String? suffix;
   final bool compactValue;
+  final double? fixedHeight;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: fixedHeight,
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: AppColors.ink,
